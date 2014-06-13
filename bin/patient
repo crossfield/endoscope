@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/endoscope"
+
+Endoscope::Agent.new("patient.1", {url: "redis://127.0.0.1:6379"}).start
+
+module Patient
+  extend self
+
+  def live
+    say_hello
+	  loop do
+      think
+      talk
+      sleep
+	  end
+  end
+
+  def say_hello
+    puts "Hello from a sample instrumented process"
+  end
+
+  def think
+    1000.times { 42 * 42 }
+  end
+
+  def talk
+    print "."
+  end
+
+  def sleep
+    Kernel.sleep 1
+  end
+end
+
+Patient.live

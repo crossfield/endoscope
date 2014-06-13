@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/endoscope/cli"
+
+abort "endoscope redis_url [namespace]" unless ARGV.count == 1 || ARGV.count == 2
+redis_url, namespace = *ARGV
+
+Endoscope::CLI.new({url: redis_url, namespace: namespace}).start
