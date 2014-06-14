@@ -1,5 +1,7 @@
 # Endoscope
 
+[![Code Climate](https://codeclimate.com/github/preplay/endoscope.png)](https://codeclimate.com/github/preplay/endoscope)
+
 Remote shell for live interaction with Ruby processes
 
 ## Installation
