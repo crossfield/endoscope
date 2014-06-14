@@ -1,4 +1,6 @@
 language: ruby
+services:
+  - redis-server
 rvm:
   - ruby-head
   - 2.1.2
