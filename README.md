@@ -1,6 +1,7 @@
 # Endoscope
 
 [![Code Climate](https://codeclimate.com/github/preplay/endoscope.png)](https://codeclimate.com/github/preplay/endoscope)
+[![Build Status](https://travis-ci.org/preplay/endoscope.svg?branch=master)](https://travis-ci.org/preplay/endoscope)
 
 Remote shell for live interaction with Ruby processes
 
