@@ -6,13 +6,13 @@ require "json"
 module Endoscope
   class Transport
     ConnectionError = Class.new(RuntimeError)
-    
+
     attr_reader :namespace, :redis_opts
     def initialize(opts)
       @namespace = opts.delete(:namespace) || "endoscope"
       @redis_opts = opts
     end
-    
+
     def wait_for_commands(dyno_name)
       channels = command_channels(dyno_name)
       connection.subscribe(*channels) do |on|
@@ -25,7 +25,7 @@ module Endoscope
     rescue Redis::BaseConnectionError => error
       raise ConnectionError, error.message, error
     end
-    
+
     def send_command(command_id, command, dyno_selector)
       channel = requests_channel(dyno_selector)
       connection.publish(channel, JSON.generate(
@@ -46,13 +46,14 @@ module Endoscope
 
     def listen_to_responses
       connection.subscribe(responses_channel) do |on|
-        on.message do |_channel_name, response|
+        on.message do |_channel_name, message|
+          response = JSON.parse(message)
           yield(response)
         end
       end
-      
+
     end
-    
+
     private
 
     def connection
@@ -75,5 +76,5 @@ module Endoscope
 
   end
 end
-    
-  
+
+

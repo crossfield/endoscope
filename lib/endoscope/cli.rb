@@ -8,7 +8,7 @@ module Endoscope
   class CLI
     attr_accessor :dyno_selector, :issued, :transport_opts
 
-    def initialize(transport_opts)
+    def initialize(transport_opts=nil)
       @transport_opts = transport_opts
     end
 
@@ -38,7 +38,7 @@ module Endoscope
     def start_responses_printing_thread
       @responses_thread = Thread.new(&method(:responses_printer))
     end
-    
+
     def responses_printer
       Thread.current[:name] = 'endoscope-responses-printing'
       listen_to_command_responses
@@ -57,16 +57,18 @@ module Endoscope
     end
 
     def handle_response(res)
-      res = JSON.parse(res)
-      # p res
+      #p res
+      #p issued
+      #p res['id']
       return unless issued.include?(res['id'])
-      issued.delete(res['id'])
       puts "From #{res['dyno_name']} :\n#{res['result']}\n\n"
+      $stdout.flush
     end
 
     def repl
       catch(:break) do
         puts "\n\n ---\nRemote console ready:\n\n"
+        $stdout.flush
         loop { re($stdout) }
       end
     end

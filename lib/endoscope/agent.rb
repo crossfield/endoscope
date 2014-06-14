@@ -5,7 +5,7 @@
 require_relative "transport"
 
 require "timeout"
-require "stringio" 
+require "stringio"
 
 module Endoscope
   class Agent
@@ -15,7 +15,14 @@ module Endoscope
 
     def initialize(dyno_name, redis_options)
       @dyno_name = dyno_name
-      @redis_options = redis_options
+      @redis_options = redis_options || default_redis_options
+    end
+
+    def default_redis_options
+      {
+        url: ENV['ENDOSCOPE_REDIS_URL'] || 'redis://127.0.0.1:6379/',
+        namespace: ENV['ENDOSCOPE_REDIS_NAMESPACE']
+      }
     end
 
     def start
@@ -66,7 +73,7 @@ module Endoscope
         end
       end
     end
-    
+
     def capture_streams
       $old_stdout = $stdout
       $old_stderr = $stderr
@@ -75,7 +82,7 @@ module Endoscope
       $stdout = out
       $stderr = out
       yield(out)
-      
+
       out.rewind
       out.read
     ensure

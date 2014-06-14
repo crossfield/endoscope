@@ -2,7 +2,11 @@
 
 require_relative "../lib/endoscope/cli"
 
-abort "endoscope redis_url [namespace]" unless ARGV.count == 1 || ARGV.count == 2
-redis_url, namespace = *ARGV
+if ARGV.count > 2
+  abort "endoscope [redis_url] [namespace] (or use ENDOSCOPE_REDIS_URL and/or ENDOSCOPE_REDIS_NAMESPACE ENV variables)"
+end
 
+redis_url, namespace = *ARGV
+redis_url ||= ENV['ENDOSCOPE_REDIS_URL']
+namespace ||= ENV['ENDOSCOPE_REDIS_NAMESPACE']
 Endoscope::CLI.new({url: redis_url, namespace: namespace}).start
